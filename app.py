@@ -47,10 +47,11 @@ input_data = pd.concat([input_data.reset_index(drop=True),geo_encoded_df],axis=1
 input_data_scaled=scaler.transform(input_data)
 prediction = model.predict(input_data_scaled)
 prediction_prob = prediction[0][0]
+st.write(f'Churn prob: {prediction_prob:.2f}')
 if prediction_prob>0.5:
-  print("Customer will leave the bank")
+  st.write("Customer will likely to churn")
 else:
-  print("Customer will not leave the bank")
+  st.write("Customer will not likely churn")
 # if st.button("Predict"):
 #     input_data = {
 #         "CreditScore": credit_score,
