@@ -28,3 +28,16 @@ tenure=st.slider('Tenure',0,10)
 num_of_products=st.slider('Number Of Products',1,4)
 has_cr_card=st.selectbox('Has Credit Card',[0,1])
 is_active_member=st.selectbox('Is Active Member',[0,1])
+
+input_data={
+    'CreditScore':600,
+    'Geography':'France',
+    'Gender':'Male',
+    'Age':40,
+    'Tenure':3,
+    'Balance':60000,
+    'NumOfProducts':2,
+    'HasCrCard':1,
+    'IsActiveMember':1,
+    'EstimatedSalary':50000
+}
