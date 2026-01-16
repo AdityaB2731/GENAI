@@ -30,33 +30,53 @@ tenure = st.slider("Tenure", 0, 10)
 num_of_products = st.slider("Number Of Products", 1, 4)
 has_cr_card = st.selectbox("Has Credit Card", [0, 1])
 is_active_member = st.selectbox("Is Active Member", [0, 1])
+input_data = pd.DataFrame({
+    "CreditScore": [credit_score],
+    "Gender": [label_encoder_gender.transform([gender])[0][,
+    "Age": [age],
+    "Tenure": [tenure],
+    "Balance": [balance],
+    "NumOfProducts": [num_of_products],
+    "HasCrCard": [has_cr_card],
+    "IsActiveMember": [is_active_member],
+    "EstimatedSalary": [estimated_salary]
+})
+geo_encoded = onehot_encoder_geo.transform([[geography]]).toarray()
+geo_encoded_df=pd.DataFrame(geo_encoded,columns=onehot_encoder_geo.get_feature_names_out(['Geography']))
+input_data = pd.concat([input_data.reset_index(drop=True),geo_encoded_df],axis=1)
+input_data_scaled=scaler.transform(input_data)
+prediction = model.predict(input_data_scaled)
+prediction_prob = prediction[0][0]
+if prediction_prob>0.5:
+  print("Customer will leave the bank")
+else:
+  print("Customer will not leave the bank")
+# if st.button("Predict"):
+#     input_data = {
+#         "CreditScore": credit_score,
+#         "Gender": label_encoder_gender.transform([gender])[0],
+#         "Age": age,
+#         "Tenure": tenure,
+#         "Balance": balance,
+#         "NumOfProducts": num_of_products,
+#         "HasCrCard": has_cr_card,
+#         "IsActiveMember": is_active_member,
+#         "EstimatedSalary": estimated_salary
+#     }
 
-if st.button("Predict"):
-    input_data = {
-        "CreditScore": credit_score,
-        "Gender": label_encoder_gender.transform([gender])[0],
-        "Age": age,
-        "Tenure": tenure,
-        "Balance": balance,
-        "NumOfProducts": num_of_products,
-        "HasCrCard": has_cr_card,
-        "IsActiveMember": is_active_member,
-        "EstimatedSalary": estimated_salary
-    }
+#     geo_encoded = onehot_encoder_geo.transform([[geography]]).toarray()
+#     geo_df = pd.DataFrame(
+#         geo_encoded,
+#         columns=onehot_encoder_geo.get_feature_names_out(["Geography"])
+#     )
 
-    geo_encoded = onehot_encoder_geo.transform([[geography]]).toarray()
-    geo_df = pd.DataFrame(
-        geo_encoded,
-        columns=onehot_encoder_geo.get_feature_names_out(["Geography"])
-    )
+#     input_df = pd.DataFrame([input_data])
+#     final_df = pd.concat([input_df, geo_df], axis=1)
 
-    input_df = pd.DataFrame([input_data])
-    final_df = pd.concat([input_df, geo_df], axis=1)
+    # input_scaled = scaler.transform(final_df)
+    # prediction = model.predict(input_scaled)[0][0]
 
-    input_scaled = scaler.transform(final_df)
-    prediction = model.predict(input_scaled)[0][0]
-
-    if prediction > 0.5:
-        st.error("Customer will leave the bank")
-    else:
-        st.success("Customer will NOT leave the bank")
+    # if prediction > 0.5:
+    #     st.error("Customer will leave the bank")
+    # else:
+    #     st.success("Customer will NOT leave the bank")
